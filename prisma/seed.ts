@@ -1,56 +1,25 @@
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+"use server"
+import { prisma } from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
-async function main() {
-  // 1. Nettoyage (Optionnel : supprime tout pour recommencer à zéro)
-  await prisma.book.deleteMany()
-  await prisma.category.deleteMany()
+export async function createBook(formData: FormData) {
+  const title = formData.get("title") as string
+  const author = formData.get("author") as string
+  // On récupère l'ID de la catégorie choisie dans le formulaire (venant du seed)
+  const categoryId = formData.get("categoryId") as string 
 
-  // 2. Création des Catégories
-  const cat1 = await prisma.category.create({ data: { name: 'Informatique' } })
-  const cat2 = await prisma.category.create({ data: { name: 'Roman' } })
-  const cat3 = await prisma.category.create({ data: { name: 'Développement Personnel' } })
-  const cat4 = await prisma.category.create({ data: { name: 'Science-Fiction' } })
-
-  // 3. Création des Livres
-  await prisma.book.createMany({
-    data: [
-      {
-        title: 'Apprendre Next.js 15',
-        author: 'Jean SWM',
-        categoryId: cat1.id,
-      },
-      {
-        title: 'Le Guide de Prisma',
-        author: 'Expert Isitcom',
-        categoryId: cat1.id,
-      },
-      {
-        title: 'L’Étranger',
-        author: 'Albert Camus',
-        categoryId: cat2.id,
-      },
-      {
-        title: 'Atomic Habits',
-        author: 'James Clear',
-        categoryId: cat3.id,
-      },
-      {
-        title: 'Dune',
-        author: 'Frank Herbert',
-        categoryId: cat4.id,
-      },
-    ],
+  await prisma.book.create({
+    data: {
+      title,
+      author,
+      //on connecte à une catégorie existante du seed
+      category: {
+        connect: { id: categoryId } 
+      }
+    },
   })
 
-  console.log('Base de données remplie avec succès !')
+  revalidatePath("/books")
+  redirect("/books")
 }
-
-main()
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })

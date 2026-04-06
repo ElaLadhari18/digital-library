@@ -10,7 +10,7 @@ export default async function AdminBorrowsPage() {
     where: { email: session?.user?.email || "" }
   })
 
-  // Sécurité : Seul l'ADMIN accède à cette vue globale
+  // Sécurité : akhaw l'ADMIN accède à cette vue globale
   if (userInDb?.role !== "ADMIN") {
     redirect("/books")
   }
@@ -25,7 +25,7 @@ export default async function AdminBorrowsPage() {
 
   return (
     <div className="max-w-5xl mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-8">Suivi des Emprunts (Global)</h1>
+      <h1 className="text-3xl font-bold mb-8">Suivi des Emprunts </h1>
 
       <div className="overflow-x-auto bg-white rounded-2xl border shadow-sm">
         <table className="w-full text-left border-collapse">
@@ -42,7 +42,7 @@ export default async function AdminBorrowsPage() {
               <tr key={book.id} className="border-b hover:bg-slate-50 transition-colors">
                 <td className="p-4 font-medium text-slate-900">{book.title}</td>
                 
-                {/* --- LA CELLULE MODIFIÉE EST ICI --- */}
+
                 <td className="p-4 text-slate-600">
                   {book.borrower?.name || "Inconnu"}
                   {book.borrowerId === userInDb?.id && (

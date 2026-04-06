@@ -12,7 +12,7 @@ export default async function HomePage() {
           Système de Gestion Bibliothécaire
         </h1>
         <p className="text-sm text-slate-500 mt-1">
-          Portail d'accès aux ressources numériques et au suivi des comptes.
+          Portail d accès aux ressources numériques et au suivi des comptes.
         </p>
       </div>
 
@@ -77,7 +77,7 @@ export default async function HomePage() {
                   href="/login" 
                   className="inline-block w-full py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-md hover:bg-slate-800 transition-colors"
                 >
-                  S'identifier
+                  S identifier
                 </Link>
               </div>
             )}
