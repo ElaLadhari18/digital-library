@@ -85,17 +85,7 @@ export default async function HomePage() {
         </section>
       </div>
 
-      {/* Informations de build (Prouve le travail technique) */}
-      <div className="mt-24 pt-8 border-t border-slate-100 flex justify-between items-center">
-        <p className="text-[10px] text-slate-400 font-medium">
-          ISITCOM - MASTER SWM - 2024/2025
-        </p>
-        <div className="flex gap-4">
-          <span className="text-[10px] text-slate-300">Next.js 15.0</span>
-          <span className="text-[10px] text-slate-300">Prisma ORM</span>
-          <span className="text-[10px] text-slate-300">NextAuth v5</span>
-        </div>
-      </div>
+
     </div>
   );
 }

@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Digital Library | Gestion Pro",
-  description: "Plateforme moderne de gestion de bibliothèque",
+  description: "Plateforme de gestion de bibliothèque",
 };
 
 export default function RootLayout({
@@ -27,9 +27,7 @@ export default function RootLayout({
           {children}
         </main>
 
-        <footer className="border-t bg-white py-6 text-center text-xs text-slate-400">
-          © 2025 Master 1 SWM - Projet Digital Library
-        </footer>
+    
       </body>
     </html>
   );
