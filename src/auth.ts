@@ -1,18 +1,31 @@
-import NextAuth from "next-auth"
+import NextAuth, { type DefaultSession } from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 
+// On définit le type pour le rôle
+declare module "next-auth" {
+  interface Session {
+    user: {
+      role: string
+    } & DefaultSession["user"]
+  }
+  interface User {
+    role?: string
+  }
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma), // <--- L'ADAPTER EST ICI
-  session: { strategy: "jwt" },    // <--- INDISPENSABLE pour mixer Google + Credentials
+  adapter: PrismaAdapter(prisma),
+  session: { strategy: "jwt" },
+  secret: process.env.AUTH_SECRET,
+  trustHost: true, 
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      // On force le rôle USER pour les nouveaux comptes Google
       profile(profile) {
         return {
           id: profile.sub,
@@ -51,15 +64,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (token as any).role = (user as any).role
+        token.role = user.role
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (session.user as any).role = token.role
+        session.user.role = token.role as string
       }
       return session
     },
