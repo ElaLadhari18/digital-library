@@ -1,6 +1,6 @@
 import { auth } from "@/auth"
 import { NextResponse } from "next/server"
-
+export const runtime = 'nodejs'; // zedtha lele deploiemnt ma3dch edge
 export default auth((req) => {
   const isLoggedIn = !!req.auth
   const { nextUrl } = req
